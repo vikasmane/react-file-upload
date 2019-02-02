@@ -1,0 +1,7 @@
+{
+  "name": "react-file-upload",
+  "version": "1.0.0",
+  "description": "File upload reusable component",
+  "main": "index.js",
+  "license": "MIT"
+}
