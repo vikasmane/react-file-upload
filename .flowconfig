@@ -1,0 +1,16 @@
+[ignore]
+.*/node_modules/.*
+.*/config/.*
+.*/scripts/.*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+all=true
+module.name_mapper.extension='scss' -> 'empty/object'
+
+[strict]
