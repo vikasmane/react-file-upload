@@ -4,6 +4,6 @@ type RETRO = {
     component: Class<Object> | React.Node
 }
 export type Options = {
-    retro?: Class<Object> | Object,
+    retro?: Class<Object> | RETRO,
     panel: boolean | Object
 }
