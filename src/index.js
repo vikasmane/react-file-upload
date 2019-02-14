@@ -6,24 +6,41 @@ import type { Options } from './packages/types';
 // $FlowFixMe
 import './app.scss';
 
-const Header = () => (
-    <div>Header1</div>
-)
-
-const fileOptions: Options = {
+const fileOptions1: Options = {
     panel: true,
+    multiple: true,
     retro: {
         heading: "Browse Files from your Computer"
     },
     dnd: {
-
+        thumbnails: {
+            extentions: true,
+            size: 'small'
+        }
+    },
+    progress: {
+        position: 'BOTTOM'
     }
+}
+
+const fileOptions2: Options = {
+
 }
 
 class App extends React.Component<{}, {}> {
     render() {
         return <div className="app container">
-            <FileUpload options={fileOptions} />
+            <div className="row">
+                <div className="col">
+                    <label htmlFor="">Comprehensive Options</label>
+                    <FileUpload options={fileOptions1} />
+                </div>
+                <div className="col">
+                    <label htmlFor="">Minimal Options</label>
+                    <FileUpload options={fileOptions2} />
+                </div>
+            </div>
+
         </div>
     }
 };

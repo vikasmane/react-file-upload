@@ -18,17 +18,8 @@ const RETRO_NO_COMPONENT = {
 const defaultProps: Object = {
     options: {
         retro: RETRO_NO_COMPONENT,
-        panel: false,
-        dnd: {
-            thumbnails: {
-                extentions: true,
-                size: 'small'
-            }
-        },
-        progress: {
-            position: 'BOTTOM'
-        },
-        existing: []
+        multiple: false,
+        panel: false
     }
 };
 
@@ -57,7 +48,7 @@ class FileUpload extends React.Component<Props, State> {
         return <div className="container file-upload">
             <div className={options.panel ? "panel panel-default" : ""}>
                 {options.panel && <div className="panel-heading">
-                    <h3>{typeof options.panel == 'boolean' ? "File Upload Control" : options.panel["heading"]}</h3>
+                    <h3>{(typeof options.panel == 'boolean') ? "File Upload Control" : options.panel["heading"]}</h3>
                 </div>}
                 <div className={options.panel ? "panel-body" : ""}>
                     <h4>{options.retro ?
@@ -67,18 +58,19 @@ class FileUpload extends React.Component<Props, State> {
                     <form action="" id="upload-form">
                         <div className="form-inline">
                             <div className="form-group">
-                                <Component />
+                                <Component multiple={options.multiple} />
                             </div>
                         </div>
-                        <div className="upload-drop-zone" id="drop-zone">
-                            Just drag and drop files here
-                        </div>
 
-                        <div className="progress">
+                        {options.dnd && <div className="upload-drop-zone" id="drop-zone">
+                            Just drag and drop files here
+                        </div>}
+
+                        {options.progress && <div className="progress">
                             <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "20%" }} >
                                 <span className="sr-only">20% Complete</span>
                             </div>
-                        </div>
+                        </div>}
                         <div className="btn-group">
                             <button type="submit" className="btn btn-sm btn-primary" id="upload-submit">Upload files</button>
                         </div>
