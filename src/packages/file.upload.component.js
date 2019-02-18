@@ -6,7 +6,8 @@ import './file.upload.scss';
 import type { Options } from './types';
 
 type Props = {
-    options: Options
+    options: Options,
+    onSubmit: Function
 };
 type State = {
     options: Object
@@ -20,31 +21,52 @@ const defaultProps: Object = {
         retro: RETRO_NO_COMPONENT,
         multiple: false,
         panel: false
-    }
+    },
+    onSubmit: () => { }
 };
 
 class FileUpload extends React.Component<Props, State> {
+    showThumbnails: Function;
+    uploadCallback: Function;
     static defaultProps: Object;
+    fileInputRef: { current: HTMLInputElement | null };
+
     constructor(props: Props) {
         super(props);
         this.state = {
-            options: {
-                ...defaultProps.options,
-                ...this.props.options,
-                ...{
+            ...defaultProps,
+            ...{
+                options: {
+                    ...defaultProps.options,
+                    ...this.props.options,
                     ...{
-                        retro: {
-                            ...RETRO_NO_COMPONENT,
-                            ...props.options.retro
+                        ...{
+                            retro: {
+                                ...RETRO_NO_COMPONENT,
+                                ...props.options.retro
+                            }
                         }
-                    }
-                },
+                    },
+                }
             }
         };
+        this.uploadCallback = this.uploadCallback.bind(this);
+        this.showThumbnails = this.showThumbnails.bind(this);
+        this.fileInputRef = React.createRef<HTMLInputElement>();
+    }
+    uploadCallback(e: Object) {
+        e.preventDefault();
+        let { onSubmit, options } = this.props;
+        if (this.fileInputRef.current) {
+            onSubmit(this.fileInputRef.current.files);
+        }
+    }
+    showThumbnails() {
+
     }
     render() {
         let { options: { retro: { heading, component: Component } }, options } = this.state;
-        console.log(options)
+
         return <div className="container file-upload">
             <div className={options.panel ? "panel panel-default" : ""}>
                 {options.panel && <div className="panel-heading">
@@ -58,12 +80,22 @@ class FileUpload extends React.Component<Props, State> {
                     <form action="" id="upload-form">
                         <div className="form-inline">
                             <div className="form-group">
-                                <Component multiple={options.multiple} />
+                                <Component
+                                    ref={this.fileInputRef}
+                                    multiple={options.multiple}
+                                    accept={options.allow}
+                                />
                             </div>
                         </div>
 
-                        {options.dnd && <div className="upload-drop-zone" id="drop-zone">
-                            Just drag and drop files here
+                        {options.dnd && <div className="drop-zone-container">
+                            <h4>Drag and Drop Below</h4>
+                            <div className="upload-drop-zone" id="drop-zone">
+                                {
+
+                                    "Just drag and drop files here"
+                                }
+                            </div>
                         </div>}
 
                         {options.progress && <div className="progress">
@@ -72,7 +104,7 @@ class FileUpload extends React.Component<Props, State> {
                             </div>
                         </div>}
                         <div className="btn-group">
-                            <button type="submit" className="btn btn-sm btn-primary" id="upload-submit">Upload files</button>
+                            <button type="submit" className="btn btn-sm btn-primary" id="upload-submit" onClick={this.uploadCallback}>Upload files</button>
                         </div>
 
                     </form>
