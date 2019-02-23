@@ -22,16 +22,17 @@ const fileOptions1: Options = {
     progress: {
         position: 'BOTTOM'
     },
-    allow: [
+    allowedMimeTypes: [
         "image/*"
     ]
 }
 
-const fileOptions2: Options = {}
+const fileOptions2: Options = {
+    allowedMimeTypes: false
+}
 
 class App extends React.Component<{}, {}> {
     onFilesUploadComplete(files) {
-        console.log(files);
 
         Axios.post("http://localhost:3001/uploadfile", files)
             .then((res) => {

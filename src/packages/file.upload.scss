@@ -18,6 +18,40 @@
     line-height: 200px;
     text-align: center;
     @include margin-top();
+    &.thumbnails{
+      overflow-y: auto;
+      line-height: 20px;
+      .thumbnails-wrapper{
+        .thumbnail-wrapper {
+          .thumbnail{
+            overflow: hidden;
+            display: block;
+            padding:5px;
+            
+            .preview{
+              padding:1px;
+              border:1px dotted #ccc;
+              width: auto;
+              height: 75px;
+              margin: auto;
+              img{
+                width:100%;
+                height:100%;
+              }
+            }
+            .captions{
+              font-size: 12px;
+              line-height: 16px;
+              .title{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+            }
+          }
+        }
+      } 
+    }
   }
 
   .drop-zone-container{

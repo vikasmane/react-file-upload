@@ -4,30 +4,43 @@ import FileUploadControl from './components/file.upload';
 // $FlowFixMe
 import './file.upload.scss';
 import type { Options } from './types';
+import Thumbnails from './components/thumbnails';
 
 type Props = {
     options: Options,
-    onSubmit: Function
+    onSubmit: Function,
+    uploadedFiles: File[]
 };
 type State = {
-    options: Object
+    options: Object,
+    uploadedFiles: File[]
 };
 const RETRO_NO_COMPONENT = {
     heading: "Select Files from your Computer",
     component: FileUploadControl
 }
-const defaultProps: Object = {
+const defaultProps: Props = {
     options: {
         retro: RETRO_NO_COMPONENT,
         multiple: false,
-        panel: false
+        panel: false,
+        allowedMimeTypes: false
     },
-    onSubmit: () => { }
+    onSubmit: () => { },
+    uploadedFiles: []
 };
 
+const getFilesInArray = (filesList: FileList): File[] => {
+    var result: File[] = [];
+    for (let i = 0; i < filesList.length; i++) {
+        result.push(filesList.item(i));
+    }
+    return result;
+}
+
 class FileUpload extends React.Component<Props, State> {
-    showThumbnails: Function;
-    uploadCallback: Function;
+    uploadCallback: (e: Event) => void;
+    showThumbnails: () => void;
     static defaultProps: Object;
     fileInputRef: { current: HTMLInputElement | null };
 
@@ -40,11 +53,9 @@ class FileUpload extends React.Component<Props, State> {
                     ...defaultProps.options,
                     ...this.props.options,
                     ...{
-                        ...{
-                            retro: {
-                                ...RETRO_NO_COMPONENT,
-                                ...props.options.retro
-                            }
+                        retro: {
+                            ...RETRO_NO_COMPONENT,
+                            ...props.options.retro
                         }
                     },
                 }
@@ -54,18 +65,23 @@ class FileUpload extends React.Component<Props, State> {
         this.showThumbnails = this.showThumbnails.bind(this);
         this.fileInputRef = React.createRef<HTMLInputElement>();
     }
-    uploadCallback(e: Object) {
+    uploadCallback(e: Event) {
         e.preventDefault();
-        let { onSubmit, options } = this.props;
+        let { onSubmit } = this.props;
         if (this.fileInputRef.current) {
             onSubmit(this.fileInputRef.current.files);
         }
     }
     showThumbnails() {
-
+        this.setState(() => (
+            {
+                ...this.state,
+                uploadedFiles: (this.fileInputRef.current ? getFilesInArray(this.fileInputRef.current.files) : [])
+            }
+        ))
     }
     render() {
-        let { options: { retro: { heading, component: Component } }, options } = this.state;
+        let { options: { retro: { heading, component: Component } }, options, uploadedFiles } = this.state;
 
         return <div className="container file-upload">
             <div className={options.panel ? "panel panel-default" : ""}>
@@ -83,17 +99,22 @@ class FileUpload extends React.Component<Props, State> {
                                 <Component
                                     ref={this.fileInputRef}
                                     multiple={options.multiple}
-                                    accept={options.allow}
+                                    accept={options.allowTypes}
+                                    showThumbnails={this.showThumbnails}
                                 />
                             </div>
                         </div>
 
                         {options.dnd && <div className="drop-zone-container">
                             <h4>Drag and Drop Below</h4>
-                            <div className="upload-drop-zone" id="drop-zone">
+                            <div className={options.multiple && this.fileInputRef.current != null && this.fileInputRef.current.files.length > 0 ?
+                                "upload-drop-zone thumbnails container" :
+                                "upload-drop-zone container"
+                            } id="drop-zone">
                                 {
-
-                                    "Just drag and drop files here"
+                                    options.dnd.thumbnails && this.fileInputRef.current != null && this.fileInputRef.current.files.length > 0 ?
+                                        (options.multiple) && <Thumbnails files={uploadedFiles} />
+                                        : <div className="col">Just drag and drop files here</div>
                                 }
                             </div>
                         </div>}

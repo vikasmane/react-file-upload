@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const PORT = 3001;
 var app = express();
-const { clearFolderRecursive } = require('./utils');
+const clearFolderRecursive = require('./utils');
 let storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'server/public/uploads')

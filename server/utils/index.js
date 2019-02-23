@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-export function clearFolderRecursive(path, cb) {
+module.exports = function clearFolderRecursive(path, cb) {
     if (fs.existsSync(path)) {
         fs.readdirSync(path).forEach(function (file) {
             var curPath = path + "/" + file;
