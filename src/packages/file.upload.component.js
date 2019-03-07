@@ -67,7 +67,15 @@ class FileUpload extends React.Component<Props, State> {
     }
     uploadCallback(e: Event) {
         e.preventDefault();
+        let { options } = this.state;
         let { onSubmit } = this.props;
+        if (options.progress) {
+            options.progress = {
+                max: 100,
+                value: 0
+            }
+            this.setState(options);
+        }
         if (this.fileInputRef.current) {
             onSubmit(this.fileInputRef.current.files);
         }
@@ -99,7 +107,7 @@ class FileUpload extends React.Component<Props, State> {
                                 <Component
                                     ref={this.fileInputRef}
                                     multiple={options.multiple}
-                                    accept={options.allowTypes}
+                                    accept={options.allowedMimeTypes}
                                     showThumbnails={this.showThumbnails}
                                 />
                             </div>
@@ -113,15 +121,15 @@ class FileUpload extends React.Component<Props, State> {
                             } id="drop-zone">
                                 {
                                     options.dnd.thumbnails && this.fileInputRef.current != null && this.fileInputRef.current.files.length > 0 ?
-                                        (options.multiple) && <Thumbnails files={uploadedFiles} />
+                                        (options.multiple) && <Thumbnails size={options.dnd.thumbnails.size} files={uploadedFiles} />
                                         : <div className="col">Just drag and drop files here</div>
                                 }
                             </div>
                         </div>}
 
                         {options.progress && <div className="progress">
-                            <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "20%" }} >
-                                <span className="sr-only">20% Complete</span>
+                            <div className="progress-bar" role="progressbar" aria-valuenow={options.progress.value} aria-valuemin="0" aria-valuemax={options.progress.max} style={{ width: `${(options.progress.value / options.progress.max * 100)}%` }} >
+                                <span className="sr-only">{(options.progress.value / options.progress.max * 100)}% Complete</span>
                             </div>
                         </div>}
                         <div className="btn-group">

@@ -3,15 +3,16 @@ import React from 'react';
 import Thumbnail from './thumbnail';
 import type { ThumbnailType } from '../types';
 
-type Props = { files: File[] };
-type State = { files: File[], fileObjects: ThumbnailType[] };
+type Props = { files: File[], size: string };
+type State = { files: File[], fileObjects: ThumbnailType[], size: string };
 
 export default class Thumbnails extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
             files: props.files,
-            fileObjects: []
+            fileObjects: [],
+            size: props.size
         };
         this.readAsFiles(props.files);
     }
@@ -34,7 +35,7 @@ export default class Thumbnails extends React.Component<Props, State> {
         };
     }
     render() {
-        return <div className="thumbnails-wrapper row">
+        return <div className={"thumbnails-wrapper row"}>
             {
                 this.state.fileObjects.map((item, ind) => (
                     <Thumbnail key={ind} size={item.size} name={item.name} src={item.src} />

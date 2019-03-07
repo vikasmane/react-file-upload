@@ -26,8 +26,16 @@ app.get('/', function (req, res) {
     res.send("Hello World!")
 });
 
-app.post('/uploadfile', upload.single('image'), function (req, res) {
-    res.json({ 'message': 'File uploaded successfully' });
+const upload2 = upload.array('images', 10);
+app.post('/uploadfiles', function (req, res) {
+    upload2(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            res.json(err);
+        } else if (err) {
+            res.json(err);
+        }
+        res.json({ 'message': 'Files uploaded successfully' });
+    })
 });
 app.get('/clearUploads', function (req, res) {
     clearFolderRecursive('server/public/uploads', (err) => {
