@@ -12,9 +12,10 @@ let storage = multer.diskStorage({
     }
 });
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Method', 'POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Authorization, content-type');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization,content-type,cache-control');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     if (req.method === 'OPTIONS') {
         res.send('Ok');
     } else {
@@ -26,16 +27,8 @@ app.get('/', function (req, res) {
     res.send("Hello World!")
 });
 
-const upload2 = upload.array('images', 10);
-app.post('/uploadfiles', function (req, res) {
-    upload2(req, res, (err) => {
-        if (err instanceof multer.MulterError) {
-            res.json(err);
-        } else if (err) {
-            res.json(err);
-        }
-        res.json({ 'message': 'Files uploaded successfully' });
-    })
+app.post('/uploadfiles', upload.array('images', 10), function (req, res) {
+    res.json({ 'message': 'Files uploaded successfully' });
 });
 app.get('/clearUploads', function (req, res) {
     clearFolderRecursive('server/public/uploads', (err) => {

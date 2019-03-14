@@ -69,8 +69,10 @@ class App extends React.Component<{}, State> {
     }
     onCompFilesUploadComplete(files) {
         let formData = new FormData();
+        for (var file of files) {
+            formData.append("images", file);
+        }
 
-        formData.append("images", files);
         Axios.post("http://localhost:3001/uploadfiles", formData, {
             onUploadProgress: this.onUploadProgress
         }).then((res) => {
@@ -78,7 +80,6 @@ class App extends React.Component<{}, State> {
         }).catch((err) => {
             console.log(err);
         })
-
     }
     render() {
         let { comp, mini } = this.state;
