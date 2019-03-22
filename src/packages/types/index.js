@@ -20,4 +20,4 @@ export type Options = {
     allowedMimeTypes: boolean | string[]
 }
 
-export type ThumbnailType = {| name: string, size: number, src: string |};
+export type ThumbnailType = {| name: string, size: number, src: string, type: string |};

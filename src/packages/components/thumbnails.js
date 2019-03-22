@@ -26,7 +26,7 @@ export default class Thumbnails extends React.Component<Props, State> {
             blob.onload = (e) => {
                 let { fileObjects } = this.state;
                 fileObjects = fileObjects.slice(0, files.length);
-                fileObjects[index] = { name: file.name, size: file.size, src: e.target.result };
+                fileObjects[index] = { name: file.name, type: file.type, size: file.size, src: e.target.result };
                 this.setState({
                     fileObjects
                 });
@@ -38,7 +38,7 @@ export default class Thumbnails extends React.Component<Props, State> {
         return <div className={"thumbnails-wrapper row"}>
             {
                 this.state.fileObjects.map((item, ind) => (
-                    <Thumbnail key={ind} size={item.size} name={item.name} src={item.src} />
+                    <Thumbnail key={ind} size={item.size} type={item.type} name={item.name} src={item.src} />
                 ))
             }
         </div>

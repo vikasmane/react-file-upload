@@ -23,16 +23,10 @@ const fileOptions1: Options = {
         value: 0
     },
     allowedMimeTypes: [
-        "image/*"
+        "application/pdf"
     ]
 }
-const getFilesInArray = (filesList: FileList): File[] => {
-    var result: File[] = [];
-    for (let i = 0; i < filesList.length; i++) {
-        result.push(filesList.item(i));
-    }
-    return result;
-}
+
 const fileOptions2: Options = {
     allowedMimeTypes: [
         "application/pdf"
